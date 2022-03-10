@@ -13,6 +13,7 @@ use App\Size;
 use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\ShipEngine\Rates;
 
 class ServicesController extends Controller {
 
@@ -97,5 +98,15 @@ class ServicesController extends Controller {
 		return response()->json(['data' => $Sizes]);
 	}
 
+	public function getShippingRates(Request $request){
+		$rates = new Rates();
+		
+		$request_data = [
+			"to_country_code" => $request->country_code,
+			"to_state_province" => $request->state_province,
+			"to_postal_code" => $request->postal_code,
+			"units" => $request->weight,
+		];
+	}
 }
 

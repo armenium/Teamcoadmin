@@ -15,7 +15,9 @@ class ShipEngine {
 		$hendler = App::make('ShipEngineAPI');
 		
 		$hendler->setup([
-			'API_KEY' => config('app.shopify')['SHIPENGINE_API_KEY'],
+			'Host: api.shipengine.com',
+			'API-Key: '.config('app.shopify')['SHIPENGINE_API_KEY'],
+			'Content-Type: application/json'
 		]);
 		
 		return $hendler;

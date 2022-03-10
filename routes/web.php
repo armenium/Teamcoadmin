@@ -50,6 +50,7 @@ Route::get('/builder/shopify', 'BuilderController@shopify')->name('builder.shopi
 Route::get('/quotes/parts', 'QuoteController@parts')->name('quote.parts');
 Route::get('/roster/parts', 'RosterController@parts')->name('roster.parts');
 Route::get('/design/parts', 'DesignController@parts')->name('design.parts');
+Route::get('/settings/parts', 'SettingsController@parts')->name('settings.parts');
 #Route::get('/quotes/test', 'QuoteController@test')->name('quote.test');
 Route::resource('/builder', 'BuilderController');
 Route::resource('/sizes', 'SizeController');
@@ -58,6 +59,7 @@ Route::resource('roster', 'RosterController');
 Route::resource('design', 'DesignController');
 Route::resource('logger', 'LoggerController');
 Route::resource('settings', 'SettingsController');
+
 
 Route::get('/testEmails/admin/{id}', function($id){
 	
