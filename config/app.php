@@ -238,6 +238,9 @@ return [
     'shipengine' => [
         'SHIPENGINE_API_VERSION' => 'v1',
         'SHIPENGINE_API_KEY' => 'xZz7WqJOZxGawX9T9DlbcPAUz/omtVhhVeuiU5lV4hI',
+        'SHIPENGINE_FROM_COUNTRY_CODE' => 'CA',
+        'SHIPENGINE_FROM_STATE_PROVINCE' => 'ON',
+        'SHIPENGINE_FROM_POSTAL_CODE' => 'L3R 1B9',
     ],
 
 ];

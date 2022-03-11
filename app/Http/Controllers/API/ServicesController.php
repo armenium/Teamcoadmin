@@ -99,14 +99,18 @@ class ServicesController extends Controller {
 	}
 
 	public function getShippingRates(Request $request){
-		$rates = new Rates();
 		
-		$request_data = [
-			"to_country_code" => $request->country_code,
-			"to_state_province" => $request->state_province,
-			"to_postal_code" => $request->postal_code,
-			"units" => $request->weight,
+		$params = [
+			"to_country_code" => strtoupper($request->post('country_code')),
+			"to_state_province" => strtoupper($request->post('state_province')),
+			"to_postal_code" => strtoupper($request->post('postal_code')),
+			"units" => intval($request->post('units')),
 		];
+		
+		$rates = new Rates();
+		$result = $rates->getEstimateRates($params);
+		
+		return response()->json($result);
 	}
 }
 

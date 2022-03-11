@@ -51,6 +51,7 @@
                                         <a class="dropdown-item" href="{{ url('builder') }}"> <i class="fa fa-tachometer"></i> Dashboard</a>
                                         <a class="dropdown-item" href="{{ route('list.user') }}"> <i class="fa fa-users"></i> Manage Users</a>
                                         <a href="{{route('edit.user', Auth::user()->id)}}" class="dropdown-item"><i class="fa fa-user"></i> My profile</a>
+                                        <a href="{{route('shipping.index')}}" class="dropdown-item"><i class="fa fa-calculator"></i> Shipping Rates</a>
                                         <a href="{{route('settings.index')}}" class="dropdown-item"><i class="fa fa-gear"></i> Settings</a>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

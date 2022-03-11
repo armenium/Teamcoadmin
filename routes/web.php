@@ -59,6 +59,7 @@ Route::resource('roster', 'RosterController');
 Route::resource('design', 'DesignController');
 Route::resource('logger', 'LoggerController');
 Route::resource('settings', 'SettingsController');
+Route::resource('shipping', 'ShippingCalculatorController');
 
 
 Route::get('/testEmails/admin/{id}', function($id){

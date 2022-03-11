@@ -3,7 +3,7 @@
 <div class="card-body">
 	<div class="row">
 		<div class="col-md-6 text-left">
-			<h4>Edit Size:</h4>
+			<h4>Edit Setting Option:</h4>
 		</div>
 	</div>
 	<hr>

@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Http\Shopify;
+namespace App\Http\ShipEngine;
 
 use App;
 use Illuminate\Support\Facades\Log;
 
 class ShipEngine {
+	
 	private $api_version = 'v1';
 	private $base_url = 'https://api.shipengine.com';
+	private $headers = [];
 	
-	public function connect(){
-		$this->api_version = config('app.shipengine')['SHIPENGINE_API_VERSION'];
+	public function __construct(){
+		$config = config('app.shipengine');
 		
-		$hendler = App::make('ShipEngineAPI');
+		$this->api_version = $config['SHIPENGINE_API_VERSION'];
 		
-		$hendler->setup([
+		$this->headers = [
 			'Host: api.shipengine.com',
-			'API-Key: '.config('app.shopify')['SHIPENGINE_API_KEY'],
+			'API-Key: '.$config['SHIPENGINE_API_KEY'],
 			'Content-Type: application/json'
-		]);
-		
-		return $hendler;
+		];
 	}
 	
 	private function create_url($url){
@@ -30,52 +30,49 @@ class ShipEngine {
 		return $url_fragment;
 	}
 	
-	public function get($url){
-		$get = $this->connect()->call([
-			'METHOD' => 'GET',
-			'URL'    => $this->create_url($url)
+	public function call($params){
+		$curl = curl_init();
+		
+		curl_setopt_array($curl, [
+			CURLOPT_URL => $params['URL'],
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 0,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => $params['METHOD'],
+			CURLOPT_POSTFIELDS => $params['DATA'],
+			CURLOPT_HTTPHEADER => $this->headers,
 		]);
 		
-		return $get;
+		$response = curl_exec($curl);
+		
+		curl_close($curl);
+		
+		return $response;
+	}
+	
+	public function get($url, $data){
+		$get = $this->call([
+			'METHOD' => 'GET',
+			'URL'    => $this->create_url($url),
+			'DATA'   => $data
+		]);
+		
+		return json_decode($get, true);
 	}
 	
 	public function post($url, $data){
-		$post = $this->connect()->call([
+		$post = $this->call([
 			'METHOD' => 'POST',
 			'URL'    => $this->create_url($url),
 			'DATA'   => $data
 		]);
 		
-		return $post;
+		return json_decode($post, true);
 	}
 	
-	public function update($url, $data){
-		$update = $this->connect()->call([
-			'METHOD' => 'PUT',
-			'URL'    => $this->create_url($url),
-			'DATA'   => $data
-		]);
-		
-		return $update;
-	}
-	
-	public function updateDefaultAddress($url){
-		$update = $this->connect()->call([
-			'METHOD' => 'PUT',
-			'URL'    => $this->create_url($url),
-		]);
-		
-		return $update;
-	}
-	
-	public function delete($url){
-		$delete = $this->connect()->call([
-			'METHOD' => 'DELETE',
-			'URL'    => $this->create_url($url)
-		]);
-		
-		return $delete;
-	}
 }
 
 
