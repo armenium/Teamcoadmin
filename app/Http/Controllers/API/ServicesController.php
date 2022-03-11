@@ -100,11 +100,20 @@ class ServicesController extends Controller {
 
 	public function getShippingRates(Request $request){
 		
+		$country_code = $request->post('country_code');
+		$state_province = $request->post('state_province');
+		$postal_code = $request->post('postal_code');
+		$units = $request->post('units');
+		
+		if(empty($country_code) || empty($state_province) || empty($postal_code) || empty($units)){
+			return response()->json(['html' => '<tr><td colspan="4" class="text-center">ERROR!<br>Invalid form data.<br>All fields are required.</td></tr>']);
+		}
+		
 		$params = [
-			"to_country_code" => strtoupper($request->post('country_code')),
-			"to_state_province" => strtoupper($request->post('state_province')),
-			"to_postal_code" => strtoupper($request->post('postal_code')),
-			"units" => intval($request->post('units')),
+			"to_country_code" => strtoupper($country_code),
+			"to_state_province" => strtoupper($state_province),
+			"to_postal_code" => strtoupper($postal_code),
+			"units" => intval($units),
 		];
 		
 		$rates = new Rates();
