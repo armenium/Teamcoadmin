@@ -1,3 +1,5 @@
+.loader {background-image: url(../images/loader_tr.gif); background-repeat: no-repeat; background-position: center;}
+
 .fa-square:before {text-shadow: 1px 1px 2px #000000;}
 .dataTables_wrapper {width: 100%;}
 .newPointer {cursor: grab;}

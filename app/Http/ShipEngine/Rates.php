@@ -57,10 +57,31 @@ class Rates extends ShipEngine{
 	}
 	
 	private function toHtml($data){
+		$html = '';
+		
 		#dd($data);
 		$data = $this->formatResults($data);
-		dd($data);
+		#dd($data);
 		
+		if(!empty($data)){
+			$rows = [];
+			foreach($data as $id => $item){
+				if(!empty($item['error_messages'])){
+					$rows[] = sprintf('<tr><td colspan="4" class="text-center">%s</td></tr>', implode(PHP_EOL, $item['error_messages']));
+				}else{
+					$rows[] = sprintf('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>',
+						$id,
+						$item['service_type'],
+						$item['delivery_days'],
+						isset($item['low']) ? $item['low'] : '-',
+						isset($item['high']) ? $item['high'] : '-',
+					);
+				}
+			}
+			$html = implode(PHP_EOL, $rows);
+		}
+		
+		return $html;
 	}
 	
 	private function formatResults($data){
@@ -72,16 +93,18 @@ class Rates extends ShipEngine{
 			foreach($items as $item){
 				$sc = $item['service_code'];
 				
-				if(!isset($results[$sc]))
+				if(!isset($results[$sc])){
 					$results[$sc] = [];
+				}
 				
 				$delivery_days = intval($item['delivery_days']);
 				
+				$results[$sc]['error_messages'] = $item['error_messages'];
 				$results[$sc]['service_type'] = $item['service_type'];
 				#$results[$sc]['carrier_code'] = $item['carrier_code'];
 				#$results[$sc]['carrier_nickname'] = $item['carrier_nickname'];
 				$results[$sc]['delivery_days'] = sprintf('%d day%s', $delivery_days, ($delivery_days == 1 ? '' : 's'));
-				$results[$sc][$lbs_type] = sprintf('$%s', $item['shipping_amount']['amount']);
+				$results[$sc][$lbs_type] = isset($item['shipping_amount']['amount']) ? sprintf('$%s', $item['shipping_amount']['amount']) : '-';
 			}
 		}
 		
