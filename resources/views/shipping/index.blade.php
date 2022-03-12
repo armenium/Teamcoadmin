@@ -34,14 +34,14 @@
 					<div class="col-8"><input type="number" class="form-control" name="units" min="1" max="150" value="" placeholder="Total # of Jerseys, Shorts, & Socks in Order (max 60)"></div>
 				</div>
 				<div class="row">
-					<div class="col-12 text-right"><button class="btn btn-primary" type="submit">GET RATE</button></div>
+					<div class="col-12 text-right"><button class="btn btn-primary" type="submit">Calculate Rates</button></div>
 				</div>
 			</form>
 		</div>
 		<div class="col-7">
 			<h4 class="text-left">Estimated Shipping Rates</h4>
 			<table id="js_result_table" class="table table-striped">
-				<thead class="thead-dark text-center">
+				<thead class="thead-light text-center">
 					<tr>
 						<th rowspan="2">Carrier & Service</th>
 						<th rowspan="2">Transit Time</th>

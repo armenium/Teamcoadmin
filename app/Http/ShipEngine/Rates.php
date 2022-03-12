@@ -49,8 +49,12 @@ class Rates extends ShipEngine{
 		foreach($this->lbs_per_units as $k => $lbs){
 			$this->request_pattern['weight']['value'] = $params['units'] * $lbs;
 			$result = $this->post($this->endpoint_url, json_encode($this->request_pattern));
-			$results[$k] = $result;
-			sleep(1);
+			if(isset($result['errors'])){
+				$results = $result;
+			}else{
+				$results[$k] = $result;
+				sleep(1);
+			}
 		}
 		
 		return ['raw' => $results, 'html' => $this->toHtml($results)];
@@ -58,29 +62,38 @@ class Rates extends ShipEngine{
 	
 	private function toHtml($data){
 		$html = '';
+		$rows = [];
 		
-		#dd($data);
-		$data = $this->formatResults($data);
-		#dd($data);
-		
-		if(!empty($data)){
-			$rows = [];
-			foreach($data as $id => $item){
-				if(!empty($item['error_messages'])){
-					$rows[] = sprintf('<tr><td colspan="4" class="text-center">%s</td></tr>', implode(PHP_EOL, $item['error_messages']));
-				}else{
-					$rows[] = sprintf('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>',
-						$id,
-						$item['service_type'],
-						$item['delivery_days'],
-						isset($item['low']) ? $item['low'] : '-',
-						isset($item['high']) ? $item['high'] : '-',
-					);
+		if(isset($data['errors'])){
+			foreach($data['errors'] as $error){
+				if($error['field_name'] == 'to_postal_code'){
+					$error['message'] = 'Invalid "Country code" or "State Province code" or "Postal code".';
+				}
+				$rows[] = sprintf('<tr><td colspan="4" class="text-center error warning">%s</td></tr>', str_replace('_', ' ', $error['message']));
+			}
+		}else{
+			$data = $this->formatResults($data);
+			
+			if(!empty($data)){
+				foreach($data as $id => $item){
+					if(!empty($item['error_messages'])){
+						$rows[] = sprintf('<tr><td colspan="4" class="text-center error info">%s</td></tr>', implode(PHP_EOL, $item['error_messages']));
+					}else{
+						$rows[] = sprintf('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>',
+							$id,
+							$item['service_type'],
+							$item['delivery_days'],
+							isset($item['low']) ? $item['low'] : '-',
+							isset($item['high']) ? $item['high'] : '-'
+						);
+					}
 				}
 			}
-			$html = implode(PHP_EOL, $rows);
 		}
 		
+		if(!empty($rows))
+			$html = implode(PHP_EOL, $rows);
+
 		return $html;
 	}
 	
