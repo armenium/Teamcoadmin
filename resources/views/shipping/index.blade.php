@@ -17,13 +17,13 @@
 			<h4 class="text-left">Ship To</h4>
 			<form id="js_shipping_rates" action="/api/getShippingRates" method="POST">
 				{{ csrf_field() }}
-				<div class="row mb-3 align-items-center">
+				<div class="row mb-3 align-items-center d-none">
 					<div class="col-4">Country (code):</div>
-					<div class="col-8"><input type="text" class="form-control" name="country_code" placeholder="Country"></div>
+					<div class="col-8"><input type="text" class="form-control" name="country_code" placeholder="Country" value="CA"></div>
 				</div>
 				<div class="row mb-3 align-items-center">
-					<div class="col-4">Province (code):</div>
-					<div class="col-8"><input type="text" class="form-control" name="state_province" placeholder="State Province"></div>
+					<div class="col-4">Province (abbreviation):</div>
+					<div class="col-8"><input type="text" class="form-control" name="state_province" placeholder="Province (abbreviation)"></div>
 				</div>
 				<div class="row mb-3 align-items-center">
 					<div class="col-4">Postal Code:</div>

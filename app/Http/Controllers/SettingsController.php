@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\design;
 use App\Settings;
 use App\Size;
 use Illuminate\Http\Request;
@@ -73,6 +74,7 @@ class SettingsController extends Controller{
 					$item->value,
 					$item->updated_at->format('M d, Y'),
 					'<a href="'.route('settings.edit', $item->id).'" class="btn btn-secondary">Edit</a>',
+					'<a href="'.route('settings.show', $item->id).'" class="btn btn-primary">View</a>',
 					'<button class="btn btn-danger btn-remove" data-reference_id="'.$item->id.'" data-toggle="modal" data-target="#myModal" data-action="'.route('settings.destroy', $item->id).'" title="Delete"><i class="fa fa-trash"></i></button>',
 				];
 			}
@@ -117,7 +119,15 @@ class SettingsController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id){}
+	public function show($id){
+		$model = Settings::findOrFail($id);
+		
+		$data = [
+			'model' => $model,
+		];
+		
+		return view('settings.show', $data);
+	}
 	
 	
 	/**

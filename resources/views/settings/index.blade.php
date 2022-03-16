@@ -26,6 +26,7 @@
 				<th>Value</th>
 				<th>Updated</th>
 				<th data-sortable="false">Edit</th>
+				<th data-sortable="false">View</th>
 				<th data-sortable="false">Delete</th>
 			</tr>
 		</thead>

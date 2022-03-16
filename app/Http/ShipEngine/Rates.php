@@ -12,7 +12,7 @@ class Rates extends ShipEngine{
 		"from_country_code" => "CA",
 		"from_state_province" => "ON",
 		"from_postal_code" => "L3R 1B9",
-		"to_country_code" => "",
+		"to_country_code" => "CA",
 		"to_state_province" => "",
 		"to_postal_code" => "",
 		"confirmation" => "none",
@@ -33,6 +33,7 @@ class Rates extends ShipEngine{
 			return ['raw' => $results, 'html' => ''];
 		}
 
+		$to_country_code = Settings::get('ship_engine_to_country_code');
 		$from_country_code = Settings::get('ship_engine_from_country_code');
 		$from_state_province = Settings::get('ship_engine_from_state_province');
 		$from_postal_code = Settings::get('ship_engine_from_postal_code');
@@ -41,7 +42,7 @@ class Rates extends ShipEngine{
 		$this->request_pattern['from_state_province'] = !is_null($from_state_province) ? $from_state_province : $config['SHIPENGINE_FROM_STATE_PROVINCE'];
 		$this->request_pattern['from_postal_code'] = !is_null($from_postal_code) ? $from_postal_code : $config['SHIPENGINE_FROM_POSTAL_CODE'];;
 		
-		$this->request_pattern['to_country_code'] = $params['to_country_code'];
+		$this->request_pattern['to_country_code'] = isset($params['to_country_code']) ? $params['to_country_code'] : $to_country_code;
 		$this->request_pattern['to_state_province'] = $params['to_state_province'];
 		$this->request_pattern['to_postal_code'] = $params['to_postal_code'];
 		
@@ -111,13 +112,19 @@ class Rates extends ShipEngine{
 				}
 				
 				$delivery_days = intval($item['delivery_days']);
+				$shipping_amount = isset($item['shipping_amount']['amount']) ? floatval($item['shipping_amount']['amount']) : 0;
+				$insurance_amount = isset($item['insurance_amount']['amount']) ? floatval($item['insurance_amount']['amount']) : 0;
+				$confirmation_amount = isset($item['confirmation_amount']['amount']) ? floatval($item['confirmation_amount']['amount']) : 0;
+				$other_amount = isset($item['other_amount']['amount']) ? floatval($item['other_amount']['amount']) : 0;
+				
+				$total_amount = $shipping_amount + $insurance_amount + $confirmation_amount + $other_amount;
 				
 				$results[$sc]['error_messages'] = $item['error_messages'];
 				$results[$sc]['service_type'] = $item['service_type'];
 				#$results[$sc]['carrier_code'] = $item['carrier_code'];
 				#$results[$sc]['carrier_nickname'] = $item['carrier_nickname'];
 				$results[$sc]['delivery_days'] = sprintf('%d day%s', $delivery_days, ($delivery_days == 1 ? '' : 's'));
-				$results[$sc][$lbs_type] = isset($item['shipping_amount']['amount']) ? sprintf('$%s', $item['shipping_amount']['amount']) : '-';
+				$results[$sc][$lbs_type] = ($total_amount > 0) ? sprintf('$%s', $total_amount) : '-';
 			}
 		}
 		
