@@ -16,6 +16,7 @@
 		<div class="col-5">
 			<h4 class="text-left">Ship To</h4>
 			<form id="js_shipping_rates" action="/api/getShippingRates" method="POST">
+				<input type="hidden" name="admin_view" value="1">
 				{{ csrf_field() }}
 				<div class="row mb-3 align-items-center d-none">
 					<div class="col-4">Country (code):</div>

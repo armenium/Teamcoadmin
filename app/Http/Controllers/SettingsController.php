@@ -73,8 +73,8 @@ class SettingsController extends Controller{
                     $item->name,
                     $item->value,
                     $item->updated_at->format('M d, Y'),
-                    '<a href="'.route('settings.edit', $item->id).'" class="btn btn-secondary">Edit</a>',
-                    '<a href="'.route('settings.show', $item->id).'" class="btn btn-primary">View</a>',
+                    '<a href="'.route('settings.edit', $item->id).'" class="btn btn-secondary"><i class="fa fa-edit"></i></a>',
+                    '<a href="'.route('settings.show', $item->id).'" class="btn btn-primary"><i class="fa fa-eye"></i></a>',
                     '<button class="btn btn-danger btn-remove" data-reference_id="'.$item->id.'" data-toggle="modal" data-target="#myModal" data-action="'.route('settings.destroy', $item->id).'" title="Delete"><i class="fa fa-trash"></i></button>',
                 ];
             }
@@ -109,7 +109,7 @@ class SettingsController extends Controller{
     public function store(Request $request){
         Settings::create($request->all());
 
-        return redirect('settings/create')->with('status', 'Setting Created');
+        return redirect('settings')->with('status', 'Setting Created');
     }
 
     /**
@@ -121,10 +121,16 @@ class SettingsController extends Controller{
      */
     public function show($id){
         $model = Settings::findOrFail($id);
-
-        $data = [
-            'model' => $model,
-        ];
+	
+	    switch($model->name){
+		    case "ship_engine_services_options":
+			    $model->value = $this->arrayToHtmlTable(json_decode($model->value, true));
+			    #$model->value = '<pre>'.print_r(json_decode($model->value, true), true).'</pre>';
+			    break;
+	    }
+	
+	
+	    $data = ['model' => $model];
 
         return view('settings.show', $data);
     }
@@ -138,18 +144,18 @@ class SettingsController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function edit($id){
-        $settings = Settings::findOrFail($id);
+        $model = Settings::findOrFail($id);
         $form = 'settings.edit';
         $json_data = [];
 
-        switch($settings->name){
-            case "ship_engine_exclude_services":
-                $form = 'settings.edit-sees';
-                $json_data = json_decode($settings->value, true);
+        switch($model->name){
+            case "ship_engine_services_options":
+                $form = 'settings.edit-seso';
+                $json_data = json_decode($model->value, true);
                 break;
         }
 
-        return view($form, ['settings' => $settings, 'json_data' => $json_data]);
+        return view($form, ['settings' => $model, 'json_data' => $json_data]);
     }
 
     /**
@@ -161,9 +167,30 @@ class SettingsController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        Settings::find($id)->update($request->all());
+	    $request_data = $request->all();
+    	$values = $request_data['value'];
+    	#dd($request_data);
+    	
+    	foreach($values as $k => $v){
+		    if(is_null($v['rate'])){
+			    $request_data['value'][$k]['rate'] = 0;
+		    }else{
+			    $request_data['value'][$k]['rate'] = floatval($request_data['value'][$k]['rate']);
+		    }
+		    if(!isset($v['status'])){
+			    $request_data['value'][$k]['status'] = 0;
+		    }else{
+			    $request_data['value'][$k]['status'] = intval($request_data['value'][$k]['status']);
+		    }
+	    }
+	
+	    #dd($request_data);
+	    $request_data['value'] = json_encode($request_data['value']);
+    	
+    	
+        Settings::find($id)->update($request_data);
 
-        return redirect('settings/'.$id.'/edit')->with('status', 'Setting updated');
+        return redirect('settings/'.$id.'/')->with('status', 'Setting updated');
     }
 
     /**
@@ -178,4 +205,16 @@ class SettingsController extends Controller{
 
         return redirect('design')->with('status', 'Setting Destroyed');
     }
+    
+    private function arrayToHtmlTable($data){
+    	$html = [];
+    	$html[] = '<table class="table table-striped">';
+    	foreach($data as $k => $v){
+    		$html[] = sprintf('<tr><td>%s</td></tr>', implode('</td><td>', $v));
+	    }
+    	$html[] = '</table>';
+    	
+    	return implode(PHP_EOL, $html);
+    }
+    
 }

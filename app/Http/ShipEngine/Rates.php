@@ -20,11 +20,21 @@ class Rates extends ShipEngine{
 		"weight" => ["value" => 0, "unit" => "pound"],
 	];
 	private $lbs_per_units = ['low' => 0.5, 'high' => 1];
+	private $services_options = [];
+	private $admin_view = false;
+	
+	public function setAdminView($value){
+		$this->admin_view = $value;
+	}
 	
 	public function getEstimateRates($params){
 		$results = [];
 		
 		$config = config('app.shipengine');
+		
+		$this->services_options = $this->getServiceOptions();
+		#dd($this->services_options);
+		
 		$ship_engine_carrier_ids = Settings::get('ship_engine_carrier_ids');
 		
 		if(!empty($ship_engine_carrier_ids)){
@@ -80,12 +90,15 @@ class Rates extends ShipEngine{
 					if(!empty($item['error_messages'])){
 						$rows[] = sprintf('<tr><td colspan="4" class="text-center error info">%s</td></tr>', implode(PHP_EOL, $item['error_messages']));
 					}else{
+						if($this->admin_view){
+							$item['service_type'] .= '<br><small class="font-red">'.$id.'</small>';
+						}
 						$rows[] = sprintf('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>',
 							$id,
 							$item['service_type'],
 							$item['delivery_days'],
-							isset($item['low']) ? $item['low'] : '-',
-							isset($item['high']) ? $item['high'] : '-'
+							(isset($item['low']) && $item['low_sort'] > 0) ? $item['low'] : '-',
+							(isset($item['high']) && $item['high_sort'] > 0) ? $item['high'] : '-'
 						);
 					}
 				}
@@ -107,9 +120,9 @@ class Rates extends ShipEngine{
 			foreach($items as $item){
 				$sc = $item['service_code'];
 				
-				if(!isset($results[$sc])){
-					$results[$sc] = [];
-				}
+				if(isset($this->services_options[$sc]) && $this->services_options[$sc]['status'] != 1) continue;
+				
+				if(!isset($results[$sc])) $results[$sc] = [];
 				
 				$delivery_days = intval($item['delivery_days']);
 				$shipping_amount = isset($item['shipping_amount']['amount']) ? floatval($item['shipping_amount']['amount']) : 0;
@@ -121,14 +134,64 @@ class Rates extends ShipEngine{
 				
 				$results[$sc]['error_messages'] = $item['error_messages'];
 				$results[$sc]['service_type'] = $item['service_type'];
-				#$results[$sc]['carrier_code'] = $item['carrier_code'];
-				#$results[$sc]['carrier_nickname'] = $item['carrier_nickname'];
-				$results[$sc]['delivery_days'] = sprintf('%d day%s', $delivery_days, ($delivery_days == 1 ? '' : 's'));
+				if(isset($this->services_options[$sc]) && $this->services_options[$sc]['type'] != $item['service_type']){
+					$results[$sc]['service_type'] = $this->services_options[$sc]['type'];
+				}
+				if(isset($this->services_options[$sc]) && $this->services_options[$sc]['desc'] != ''){
+					$results[$sc]['service_type'] .= sprintf('<br><small>%s</small>', $this->services_options[$sc]['desc']);
+				}
+				$results[$sc]['delivery_days'] = sprintf('%d business day%s', $delivery_days, ($delivery_days == 1 ? '' : 's'));
+				if(isset($this->services_options[$sc])){
+					$total_amount += $this->services_options[$sc]['rate'];
+				}
 				$results[$sc][$lbs_type] = ($total_amount > 0) ? sprintf('$%s', $total_amount) : '-';
+				$results[$sc][$lbs_type.'_sort'] = $total_amount;
 			}
 		}
 		
+		$results = $this->removeErrorFromResults($results);
+		$results = $this->sortResults($results);
+		#dd($results);
+		
 		return $results;
+	}
+	
+	private function removeErrorFromResults($results){
+		if(count($results) > 0){
+			unset($results[""]);
+		}
+		
+		return $results;
+	}
+	
+	private function sortResults($results){
+		foreach($results as $k => $v){
+			if(!isset($v['low'])) $results[$k]['low'] = 0;
+			if(!isset($v['low_sort'])) $results[$k]['low_sort'] = 0;
+			if(!isset($v['high'])) $results[$k]['high'] = 0;
+			if(!isset($v['high_sort'])) $results[$k]['high_sort'] = 0;
+		}
+		
+		$low_sort  = array_column($results, 'low_sort');
+		$high_sort = array_column($results, 'high_sort');
+		array_multisort($low_sort, SORT_ASC, $high_sort, SORT_ASC, $results);
+		
+		return $results;
+	}
+	
+	private function getServiceOptions(){
+		$options = [];
+		
+		$services_options = Settings::get('ship_engine_services_options');
+		$services_options = json_decode($services_options, true);
+		
+		if(!empty($services_options)){
+			foreach($services_options as $k => $v){
+				$options[$v['code']] = $v;
+			}
+		}
+		
+		return $options;
 	}
 	
 }

@@ -44,7 +44,7 @@
 					</tr>
 					<tr>
 						<td><b>Value:</b></td>
-						<td>{{ $model->value ?? 'No Value' }}</td>
+						<td>{!! $model->value ?? 'No Value' !!}</td>
 					</tr>
 					<tr>
 						<td><b>Active:</b></td>

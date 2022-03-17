@@ -18,8 +18,8 @@
 		</button>
 	</div>
 	@endif
-	<table class="table table-striped text-center" id="table">
-		<thead class="thead-dark">
+	<table class="table table-striped" id="table">
+		<thead class="thead-dark text-center">
 			<tr>
 				<th>ID</th>
 				<th>Name</th>
@@ -37,7 +37,8 @@
 				<td>{{ $setting->name }}</td>
 				<td>{{ $setting->value }}</td>
 				<td>{{ $setting->updated_at->format('M d, Y') }}</td>
-				<td><a href="{{route('settings.edit', $setting->id)}}" class="btn btn-primary"><i class="fa fa-edit"></i></a></td>
+				<td><a href="{{route('settings.edit', $setting->id)}}" class="btn btn-secondary"><i class="fa fa-edit"></i></a></td>
+				<td><a href="{{route('settings.show', $setting->id)}}" class="btn btn-primary"><i class="fa fa-eye"></i></a></td>
 				<td>
 					<button class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{$setting->id}}" title="Delete"><i class="fa fa-trash"></i></button>
 					<div id="myModal_{{$setting->id}}" class="modal fade" role="dialog">

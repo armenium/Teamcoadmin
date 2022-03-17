@@ -100,6 +100,7 @@ class ServicesController extends Controller {
 
 	public function getShippingRates(Request $request){
 		
+		$admin_view = $request->post('admin_view');
 		$country_code = $request->post('country_code');
 		$state_province = $request->post('state_province');
 		$postal_code = $request->post('postal_code');
@@ -117,6 +118,7 @@ class ServicesController extends Controller {
 		];
 		
 		$rates = new Rates();
+		$rates->setAdminView($admin_view);
 		$result = $rates->getEstimateRates($params);
 		
 		return response()->json($result);
