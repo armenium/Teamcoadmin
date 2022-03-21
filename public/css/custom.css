@@ -49,42 +49,19 @@ label.img-item img {max-width: 100%; max-height: 110px; display: block; margin: 
 .hidden {display: none;}
 .title-edit-btn {cursor: pointer; margin-left: 15px;}
 
-.custom-table {
-	width: 36% !important;
-	margin: 0 auto
-}
-.custom-table td {
-	padding: 0 10px !important;
-	vertical-align: middle !important;
-	text-align: center;
-	white-space: nowrap;
-}
-.custom-table td .form-control {
-	border: 0
-}
-.custom-table th{
-	padding: .5rem !important;
-}
-.custom-table td .form-control:focus {
-	box-shadow: unset !important
-}
+.custom-table {width: 36% !important; margin: 0 auto}
+.custom-table td {padding: 0 10px !important; vertical-align: middle !important; text-align: center; white-space: nowrap;}
+.custom-table td .form-control {border: 0}
+.custom-table th {padding: .5rem !important;}
+.custom-table td .form-control:focus {box-shadow: unset !important}
 .custom-table input[readonly] {background-color: transparent;}
-.custom-table-2 {
-	/*max-width: 450px !important;*/
-	margin: 0 auto;
-}
-.custom-table-2 td {
-	padding: 0 !important;
-	vertical-align: middle !important;
-	text-align: center
-}
-.custom-table-2 td .form-control {
-	border: 0
-}
-.custom-table-2 td .form-control:focus {
-	box-shadow: unset !important
-}
+.custom-table-2 {/*max-width: 450px !important;*/ margin: 0 auto;}
+.custom-table-2 td {padding: 0 !important; vertical-align: middle !important; text-align: center}
+.custom-table-2 td .form-control {border: 0}
+.custom-table-2 td .form-control:focus {box-shadow: unset !important}
 
+table.settings tr td:nth-child(3){text-overflow: ellipsis; overflow: hidden; max-width: 200px; white-space: nowrap;}
+table.settings tr td:nth-child(4){width: 150px;}
 
 
 @media (max-width: 767px) {

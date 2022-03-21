@@ -171,22 +171,23 @@ class SettingsController extends Controller{
     	$values = $request_data['value'];
     	#dd($request_data);
     	
-    	foreach($values as $k => $v){
-		    if(is_null($v['rate'])){
-			    $request_data['value'][$k]['rate'] = 0;
-		    }else{
-			    $request_data['value'][$k]['rate'] = floatval($request_data['value'][$k]['rate']);
+    	if($request_data['name'] == 'ship_engine_services_options'){
+		    foreach($values as $k => $v){
+			    if(is_null($v['rate'])){
+				    $request_data['value'][$k]['rate'] = 0;
+			    }else{
+				    $request_data['value'][$k]['rate'] = floatval($request_data['value'][$k]['rate']);
+			    }
+			    if(!isset($v['status'])){
+				    $request_data['value'][$k]['status'] = 0;
+			    }else{
+				    $request_data['value'][$k]['status'] = intval($request_data['value'][$k]['status']);
+			    }
 		    }
-		    if(!isset($v['status'])){
-			    $request_data['value'][$k]['status'] = 0;
-		    }else{
-			    $request_data['value'][$k]['status'] = intval($request_data['value'][$k]['status']);
-		    }
+		
+		    #dd($request_data);
+		    $request_data['value'] = json_encode($request_data['value']);
 	    }
-	
-	    #dd($request_data);
-	    $request_data['value'] = json_encode($request_data['value']);
-    	
     	
         Settings::find($id)->update($request_data);
 

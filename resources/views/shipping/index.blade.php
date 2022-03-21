@@ -1,4 +1,4 @@
-@extends('layouts.app',['title' => 'Manage Design'])
+@extends('layouts.app',['title' => 'Manage Shipping'])
 @section('styles')
 	<style type="text/css">
 		table.table-striped thead th,
@@ -23,7 +23,7 @@
 					<div class="col-8"><input type="text" class="form-control" name="country_code" placeholder="Country" value="CA"></div>
 				</div>
 				<div class="row mb-3 align-items-center">
-					<div class="col-4">Province (abbreviation):</div>
+					<div class="col-4">Province (Abbreviation):</div>
 					<div class="col-8"><input type="text" class="form-control" name="state_province" placeholder="Province (abbreviation)"></div>
 				</div>
 				<div class="row mb-3 align-items-center">
@@ -32,7 +32,7 @@
 				</div>
 				<div class="row mb-3 align-items-center">
 					<div class="col-4">Total Units:<br><small>(max 150 units)</small></div>
-					<div class="col-8"><input type="number" class="form-control" name="units" min="1" max="150" value="" placeholder="Total # of Jerseys, Shorts, & Socks in Order (max 60)"></div>
+					<div class="col-8"><input type="number" class="form-control" name="units" min="1" max="150" value="" placeholder="Total # of Units in Order (max 60)"></div>
 				</div>
 				<div class="row">
 					<div class="col-12 text-right"><button class="btn btn-primary" type="submit">Calculate Rates</button></div>

@@ -1,4 +1,4 @@
-@extends('layouts.app',['title' => 'Manage Design'])
+@extends('layouts.app',['title' => 'Manage Settings'])
 @section('styles')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"/>
 {{--<link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}"/>--}}
@@ -18,7 +18,7 @@
 		</button>
 	</div>
 	@endif
-	<table class="table table-striped" id="table">
+	<table class="table table-striped settings" id="table">
 		<thead class="thead-dark text-center">
 			<tr>
 				<th>ID</th>

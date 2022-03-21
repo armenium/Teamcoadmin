@@ -1,9 +1,9 @@
-@extends('layouts.app',['title' => 'Edit Size'])
+@extends('layouts.app',['title' => 'Edit Ship Engine Services Options'])
 @section('content')
     <div class="card-body">
         <div class="row">
             <div class="col-md-6 text-left">
-                <h4>Edit Setting Option:</h4>
+                <h4>Edit Ship Engine Services Options:</h4>
             </div>
         </div>
         <hr>
