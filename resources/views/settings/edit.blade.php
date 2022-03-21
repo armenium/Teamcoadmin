@@ -2,8 +2,11 @@
 @section('content')
 <div class="card-body">
 	<div class="row">
-		<div class="col-md-6 text-left">
-			<h4>Edit Setting Option:</h4>
+		<div class="col-md-8 text-left">
+			<h4>{{ucfirst(str_replace('_', ' ', $settings->name))}} Option:</h4>
+		</div>
+		<div class="col-md-4 text-right">
+			<h4>Edit mode</h4>
 		</div>
 	</div>
 	<hr>

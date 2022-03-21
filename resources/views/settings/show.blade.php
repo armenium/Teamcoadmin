@@ -52,6 +52,10 @@
 					</tr>
 				</tbody>
 			</table>
+			<div>
+				<a href="{{route('settings.index')}}" class="btn btn-secondary"><i class="fa fa-angle-left"></i> Back to list</a>
+				<a href="{{route('settings.edit', $model->id)}}" class="btn btn-secondary"><i class="fa fa-edit"></i> Edit again</a>
+			</div>
 		</div>
 	</div>
 </div>

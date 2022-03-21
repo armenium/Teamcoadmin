@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\design;
 use App\Settings;
 use App\Size;
@@ -70,7 +69,7 @@ class SettingsController extends Controller{
             foreach($data->all() as $item){
                 $settings[] = [
                     $item->id,
-                    $item->name,
+                    ucfirst(str_replace('_', ' ', $item->name)),
                     $item->value,
                     $item->updated_at->format('M d, Y'),
                     '<a href="'.route('settings.edit', $item->id).'" class="btn btn-secondary"><i class="fa fa-edit"></i></a>',
@@ -123,6 +122,7 @@ class SettingsController extends Controller{
         $model = Settings::findOrFail($id);
 	
 	    switch($model->name){
+		    case "ship_engine_jersey_type_options":
 		    case "ship_engine_services_options":
 			    $model->value = $this->arrayToHtmlTable(json_decode($model->value, true));
 			    #$model->value = '<pre>'.print_r(json_decode($model->value, true), true).'</pre>';
@@ -153,6 +153,10 @@ class SettingsController extends Controller{
                 $form = 'settings.edit-seso';
                 $json_data = json_decode($model->value, true);
                 break;
+            case "ship_engine_jersey_type_options":
+                $form = 'settings.edit-seseo';
+                $json_data = json_decode($model->value, true);
+                break;
         }
 
         return view($form, ['settings' => $model, 'json_data' => $json_data]);
@@ -171,20 +175,33 @@ class SettingsController extends Controller{
     	$values = $request_data['value'];
     	#dd($request_data);
     	
-    	if($request_data['name'] == 'ship_engine_services_options'){
-		    foreach($values as $k => $v){
-			    if(is_null($v['rate'])){
-				    $request_data['value'][$k]['rate'] = 0;
-			    }else{
-				    $request_data['value'][$k]['rate'] = floatval($request_data['value'][$k]['rate']);
+    	switch($request_data['name']){
+		    case 'ship_engine_jersey_type_options':
+			    foreach($values as $k => $v){
+				    if(is_null($v['cost'])){
+					    $request_data['value'][$k]['cost'] = 1;
+				    }else{
+					    $request_data['value'][$k]['cost'] = floatval($request_data['value'][$k]['cost']);
+				    }
 			    }
-			    if(!isset($v['status'])){
-				    $request_data['value'][$k]['status'] = 0;
-			    }else{
-				    $request_data['value'][$k]['status'] = intval($request_data['value'][$k]['status']);
+			    break;
+		    case 'ship_engine_services_options':
+			    foreach($values as $k => $v){
+				    if(is_null($v['rate'])){
+					    $request_data['value'][$k]['rate'] = 0;
+				    }else{
+					    $request_data['value'][$k]['rate'] = floatval($request_data['value'][$k]['rate']);
+				    }
+				    if(!isset($v['status'])){
+					    $request_data['value'][$k]['status'] = 0;
+				    }else{
+					    $request_data['value'][$k]['status'] = intval($request_data['value'][$k]['status']);
+				    }
 			    }
-		    }
-		
+			    break;
+	    }
+	    
+	    if(is_array($request_data['value'])){
 		    #dd($request_data);
 		    $request_data['value'] = json_encode($request_data['value']);
 	    }

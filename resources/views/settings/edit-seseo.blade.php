@@ -1,9 +1,9 @@
-@extends('layouts.app',['title' => 'Edit Ship Engine Services Options'])
+@extends('layouts.app',['title' => 'Edit Ship Engine Jersey Type Options'])
 @section('content')
     <div class="card-body">
         <div class="row">
             <div class="col-md-8 text-left">
-                <h4>Ship Engine Services Options:</h4>
+                <h4>Ship Engine Jersey Type Options:</h4>
             </div>
             <div class="col-md-4 text-right">
                 <h4>Edit mode</h4>
@@ -36,21 +36,17 @@
             </div>
             <div class="form-group">
                 <label for="name">Value:</label>
-                <table id="js_multi_data_table" class="table table-striped">
+                <table id="js_multi_data_table" class="table table-striped shipto">
                         <tr>
-                            <th>Service name description<br><small>(For example: Canada Post)</small></th>
-                            <th>Service name<br><small>(json key: service_type)</small></th>
-                            <th>Service code<br><small>(json key: service_code)</small></th>
-                            <th>Custom rate<br><small>(Enter your custom rate without dollar sign)</small></th>
-                            <th>Status<br><small>(uncheck if you want to exclude from the results)</small></th>
+                            <th>Option title</th>
+                            <th>Cost coefficient</th>
+                            <th>Status<br><small>(uncheck if you want to exclude from the form)</small></th>
                             <th>Action</th>
                         </tr>
                     @foreach($json_data as $k => $v)
                         <tr>
-                            <td><input type="text" class="form-control" name="value[{{$k}}][desc]" placeholder="Custom Description" value="{{$v['desc']}}"></td>
-                            <td><input type="text" class="form-control" name="value[{{$k}}][type]" placeholder="service_type" value="{{$v['type']}}"></td>
-                            <td><input type="text" class="form-control" name="value[{{$k}}][code]" placeholder="service_code" value="{{$v['code']}}"></td>
-                            <td><input type="number" class="form-control" name="value[{{$k}}][rate]" placeholder="Digit only" value="{{$v['rate']}}"></td>
+                            <td><input type="text" class="form-control" name="value[{{$k}}][title]" placeholder="Option title" value="{{$v['title']}}"></td>
+                            <td><input type="number" class="form-control" name="value[{{$k}}][cost]" placeholder="Cost coefficient" value="{{$v['cost']}}" step="any"></td>
                             <td><input type="checkbox" class="form-control" name="value[{{$k}}][status]" value="1" {{$v['status'] ? 'checked' : ''}}></td>
                             <td><a role="button" class="js_remove_row btn btn-danger btn-remove"><i class="fa fa-trash"></i></a></td>
                         </tr>
@@ -90,10 +86,8 @@
                     var key = (BJS.vars.last_key + 1),
                         $tr = $('<tr>');
 
-                    $tr.append('<td><input type="text" class="form-control" name="value['+key+'][desc]" placeholder="Custom Description" value=""></td>');
-                    $tr.append('<td><input type="text" class="form-control" name="value['+key+'][type]" placeholder="service_type" value=""></td>');
-                    $tr.append('<td><input type="text" class="form-control" name="value['+key+'][code]" placeholder="service_code" value=""></td>');
-                    $tr.append('<td><input type="number" class="form-control" name="value['+key+'][rate]" placeholder="Digit only" value=""></td>');
+                    $tr.append('<td><input type="text" class="form-control" name="value['+key+'][title]" placeholder="Option title" value=""></td>');
+                    $tr.append('<td><input type="number" class="form-control" name="value['+key+'][cost]" placeholder="Digit only" value="" step="any"></td>');
                     $tr.append('<td><input type="checkbox" class="form-control" name="value['+key+'][status]" value="1" checked></td>');
                     $tr.append('<td><a role="button" class="js_remove_row btn btn-danger btn-remove"><i class="fa fa-trash"></i></a></td>');
 

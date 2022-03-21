@@ -30,6 +30,25 @@
 					<div class="col-4">Postal Code:</div>
 					<div class="col-8"><input type="text" class="form-control" name="postal_code" placeholder="Postal Code"></div>
 				</div>
+				@if(!empty($custom_fields))
+				<div class="row mb-3 align-items-center">
+					<div class="col-4">Jersey Type:</div>
+					<div class="col-8">
+						@foreach($custom_fields as $k => $v)
+							@if($v['status'] == 1)
+							<div class="row">
+								<div class="col-2">
+									<input type="radio" id="jersey_type_{{$k}}" name="jersey_type" value="{{$v['cost']}}">
+								</div>
+								<div class="col-10">
+									<label class="custom-radio" for="jersey_type_{{$k}}">{{$v['title']}}</label>
+								</div>
+							</div>
+							@endif
+						@endforeach
+					</div>
+				</div>
+				@endif
 				<div class="row mb-3 align-items-center">
 					<div class="col-4">Total Units:<br><small>(max 150 units)</small></div>
 					<div class="col-8"><input type="number" class="form-control" name="units" min="1" max="150" value="" placeholder="Total # of Units in Order (max 60)"></div>

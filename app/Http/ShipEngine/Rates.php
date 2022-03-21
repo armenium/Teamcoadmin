@@ -188,33 +188,43 @@ class Rates extends ShipEngine{
 		
 		$service_settings = Settings::getLike('ship_engine_');
 		
-		foreach($service_settings as $k => $v){
-			$key = str_replace('ship_engine_', '', $k);
+		foreach($service_settings as $key => $value){
+			$_key = str_replace('ship_engine_', '', $key);
 			
-			switch($k){
-				case 'ship_engine_carrier_ids':
-					$this->se_settings[$key] = array_map('trim', explode(',', $v));
+			switch($_key){
+				case 'carrier_ids':
+					$this->se_settings[$_key] = array_map('trim', explode(',', $value));
 					break;
-				case 'ship_engine_services_options':
+				case 'jersey_type_options':
 					$options = [];
-					$services_options = json_decode($v, true);
+					$services_options = json_decode($value, true);
+					if(!empty($services_options)){
+						foreach($services_options as $k => $v){
+							$options[$k] = $v;
+						}
+					}
+					$this->se_settings[$_key] = $options;
+					break;
+				case 'services_options':
+					$options = [];
+					$services_options = json_decode($value, true);
 					if(!empty($services_options)){
 						foreach($services_options as $k => $v){
 							$options[$v['code']] = $v;
 						}
 					}
-					$this->se_settings[$key] = $options;
+					$this->se_settings[$_key] = $options;
 					break;
 				default:
-					if(is_numeric($v)){
-						$v = intval($v);
+					if(is_numeric($value)){
+						$value = intval($value);
 					}
-					$this->se_settings[$key] = $v;
+					$this->se_settings[$_key] = $value;
 					break;
 			}
 		}
 		
-		#dd($this->se_settings);
+		dd($this->se_settings);
 	}
 	
 	private function addPickupData(){

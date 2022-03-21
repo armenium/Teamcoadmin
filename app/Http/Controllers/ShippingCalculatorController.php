@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Settings;
 use Illuminate\Http\Request;
 
 class ShippingCalculatorController extends Controller{
@@ -16,7 +16,15 @@ class ShippingCalculatorController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(){
-		return view('shipping.index');
+		$custom_fields = Settings::get('ship_engine_jersey_type_options');
+		
+		if(!is_null($custom_fields)){
+			$custom_fields = json_decode($custom_fields, true);
+		}else{
+			$custom_fields = [];
+		}
+		
+		return view('shipping.index', ['custom_fields' => $custom_fields]);
 	}
 	
 }
