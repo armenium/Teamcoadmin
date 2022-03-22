@@ -36,14 +36,7 @@
 					<div class="col-8">
 						@foreach($custom_fields as $k => $v)
 							@if($v['status'] == 1)
-							<div class="row">
-								<div class="col-2">
-									<input type="radio" id="jersey_type_{{$k}}" name="jersey_type" value="{{$v['cost']}}">
-								</div>
-								<div class="col-10">
-									<label class="custom-radio" for="jersey_type_{{$k}}">{{$v['title']}}</label>
-								</div>
-							</div>
+								<label class="custom-radio"><input type="radio" name="jersey_type" value="{{$k}}"> {{$v['title']}}</label>
 							@endif
 						@endforeach
 					</div>
@@ -60,16 +53,12 @@
 		</div>
 		<div class="col-7">
 			<h4 class="text-left">Estimated Shipping Rates</h4>
-			<table id="js_result_table" class="table table-striped">
+			<table id="js_result_table" class="table table-striped shipping-results">
 				<thead class="thead-light text-center">
 					<tr>
-						<th rowspan="2">Carrier & Service</th>
-						<th rowspan="2">Transit Time</th>
-						<th colspan="2">Estimated Cost</th>
-					</tr>
-					<tr>
-						<th>Low</th>
-						<th>High</th>
+						<th>Carrier & Service</th>
+						<th>Transit Time</th>
+						<th>Estimated Cost</th>
 					</tr>
 				</thead>
 				<tbody>

@@ -9,11 +9,13 @@ use App\Http\SVG\arrayUtilities;
 use App\Http\SVG\lotSVGHelper;
 use App\Http\SVG\Svg;
 use App\Product;
+use App\Settings;
 use App\Size;
 use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\ShipEngine\Rates;
+use App\Http\Controllers\ShippingCalculatorController;
 
 class ServicesController extends Controller {
 
@@ -105,6 +107,7 @@ class ServicesController extends Controller {
 		$state_province = $request->post('state_province');
 		$postal_code = $request->post('postal_code');
 		$units = $request->post('units');
+		$jersey_type = $request->post('jersey_type');
 		
 		if(empty($country_code) || empty($state_province) || empty($postal_code) || empty($units)){
 			return response()->json(['html' => '<tr><td colspan="4" class="text-center">ERROR!<br>Invalid form data.<br>All fields are required.</td></tr>']);
@@ -115,6 +118,7 @@ class ServicesController extends Controller {
 			"to_state_province" => strtoupper($state_province),
 			"to_postal_code" => strtoupper($postal_code),
 			"units" => intval($units),
+			"jersey_type" => intval($jersey_type),
 		];
 		
 		$rates = new Rates();
@@ -123,5 +127,14 @@ class ServicesController extends Controller {
 		
 		return response()->json($result);
 	}
+	
+	public function getShippingFormFields(){
+		
+		$controller = new ShippingCalculatorController();
+		$view = $controller->getFields();
+		
+		return response()->json(['html' => $view]);
+	}
+	
 }
 

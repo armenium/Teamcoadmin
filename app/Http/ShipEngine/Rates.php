@@ -47,16 +47,9 @@ class Rates extends ShipEngine{
 		$this->request_pattern['to_postal_code'] = $params['to_postal_code'];
 		
 		
-		foreach($this->lbs_per_units as $k => $lbs){
-			$this->request_pattern['weight']['value'] = $params['units'] * $lbs;
-			$result = $this->post($this->endpoint_url, json_encode($this->request_pattern));
-			if(isset($result['errors'])){
-				$results = $result;
-			}else{
-				$results[$k] = $result;
-				sleep(1);
-			}
-		}
+		$this->request_pattern['weight']['value'] = $params['units'] * floatval($this->se_settings['jersey_type_options'][$params['jersey_type']]['cost']);
+		#dd($this->request_pattern);
+		$results = $this->post($this->endpoint_url, json_encode($this->request_pattern));
 		
 		return ['raw' => $results, 'html' => $this->toHtml($results)];
 	}
@@ -70,7 +63,7 @@ class Rates extends ShipEngine{
 				if($error['field_name'] == 'to_postal_code'){
 					$error['message'] = 'Invalid "Country code" or "State Province code" or "Postal code".';
 				}
-				$rows[] = sprintf('<tr><td colspan="4" class="text-center error warning">%s</td></tr>', str_replace('_', ' ', $error['message']));
+				$rows[] = sprintf('<tr><td colspan="3" class="text-center error warning">%s</td></tr>', str_replace('_', ' ', $error['message']));
 			}
 		}else{
 			$data = $this->formatResults($data);
@@ -78,17 +71,16 @@ class Rates extends ShipEngine{
 			if(!empty($data)){
 				foreach($data as $id => $item){
 					if(!empty($item['error_messages'])){
-						$rows[] = sprintf('<tr><td colspan="4" class="text-center error info">%s</td></tr>', implode(PHP_EOL, $item['error_messages']));
+						$rows[] = sprintf('<tr><td colspan="3" class="text-center error info">%s</td></tr>', implode(PHP_EOL, $item['error_messages']));
 					}else{
 						if($this->admin_view){
 							$item['service_type'] .= '<br><small class="font-red">'.$id.'</small>';
 						}
-						$rows[] = sprintf('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>',
+						$rows[] = sprintf('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td></tr>',
 							$id,
 							$item['service_type'],
 							$item['delivery_days'],
-							isset($item['low']) ? $item['low'] : '-',
-							isset($item['high']) ? $item['high'] : '-'
+							isset($item['estimate']) ? $item['estimate'] : '-',
 						);
 					}
 				}
@@ -104,54 +96,50 @@ class Rates extends ShipEngine{
 	private function formatResults($data){
 		$results = $this->addPickupData();
 		
-		foreach($data as $lbs_type => $items){
-			if(empty($items)) continue;
+		foreach($data as $item){
+			$sc = trim($item['service_code']);
 			
-			foreach($items as $item){
-				$sc = trim($item['service_code']);
-				
-				if($this->se_settings['display_only_specific_services']){
-					if(!isset($this->se_settings['services_options'][$sc])){
-						continue;
-					}
-				}
-				
-				if(isset($this->se_settings['services_options'][$sc]) && intval($this->se_settings['services_options'][$sc]['status']) == 0){
+			if($this->se_settings['display_only_specific_services']){
+				if(!isset($this->se_settings['services_options'][$sc])){
 					continue;
 				}
-				
-				if(!isset($results[$sc])){
-					$results[$sc] = [];
-				}
-				
-				$delivery_days       = intval($item['delivery_days']);
-				$shipping_amount     = isset($item['shipping_amount']['amount']) ? floatval($item['shipping_amount']['amount']) : 0;
-				$insurance_amount    = isset($item['insurance_amount']['amount']) ? floatval($item['insurance_amount']['amount']) : 0;
-				$confirmation_amount = isset($item['confirmation_amount']['amount']) ? floatval($item['confirmation_amount']['amount']) : 0;
-				$other_amount        = isset($item['other_amount']['amount']) ? floatval($item['other_amount']['amount']) : 0;
-				
-				$total_amount = $shipping_amount + $insurance_amount + $confirmation_amount + $other_amount;
-				
-				$results[$sc]['error_messages'] = $item['error_messages'];
-				
-				$service_type   = $item['service_type'];
-				if(isset($this->se_settings['services_options'][$sc]) && $this->se_settings['services_options'][$sc]['type'] != $item['service_type']){
-					$service_type = $this->se_settings['services_options'][$sc]['type'];
-				}
-				if(isset($this->se_settings['services_options'][$sc]) && $this->se_settings['services_options'][$sc]['desc'] != ''){
-					$results[$sc]['service_type'] = sprintf('<small>%s</small><br>%s', $this->se_settings['services_options'][$sc]['desc'], $service_type);
-				}else{
-					$results[$sc]['service_type'] = $service_type;
-				}
-				
-				$results[$sc]['delivery_days'] = sprintf('%d business day%s', $delivery_days, ($delivery_days == 1 ? '' : 's'));
-				if(isset($this->se_settings['services_options'][$sc])){
-					$total_amount += $this->se_settings['services_options'][$sc]['rate'];
-				}
-				$results[$sc][$lbs_type]         = ($total_amount > 0) ? sprintf('$%s', $total_amount) : '-';
-				$results[$sc][$lbs_type.'_sort'] = $total_amount;
-				
 			}
+			
+			if(isset($this->se_settings['services_options'][$sc]) && intval($this->se_settings['services_options'][$sc]['status']) == 0){
+				continue;
+			}
+			
+			if(!isset($results[$sc])){
+				$results[$sc] = [];
+			}
+			
+			$delivery_days       = intval($item['delivery_days']);
+			$shipping_amount     = isset($item['shipping_amount']['amount']) ? floatval($item['shipping_amount']['amount']) : 0;
+			$insurance_amount    = isset($item['insurance_amount']['amount']) ? floatval($item['insurance_amount']['amount']) : 0;
+			$confirmation_amount = isset($item['confirmation_amount']['amount']) ? floatval($item['confirmation_amount']['amount']) : 0;
+			$other_amount        = isset($item['other_amount']['amount']) ? floatval($item['other_amount']['amount']) : 0;
+			
+			$total_amount = $shipping_amount + $insurance_amount + $confirmation_amount + $other_amount;
+			
+			$results[$sc]['error_messages'] = $item['error_messages'];
+			
+			$service_type   = $item['service_type'];
+			if(isset($this->se_settings['services_options'][$sc]) && $this->se_settings['services_options'][$sc]['type'] != $item['service_type']){
+				$service_type = $this->se_settings['services_options'][$sc]['type'];
+			}
+			if(isset($this->se_settings['services_options'][$sc]) && $this->se_settings['services_options'][$sc]['desc'] != ''){
+				$results[$sc]['service_type'] = sprintf('<small>%s</small><br>%s', $this->se_settings['services_options'][$sc]['desc'], $service_type);
+			}else{
+				$results[$sc]['service_type'] = $service_type;
+			}
+			
+			$results[$sc]['delivery_days'] = sprintf('%d business day%s', $delivery_days, ($delivery_days == 1 ? '' : 's'));
+			if(isset($this->se_settings['services_options'][$sc])){
+				$total_amount += $this->se_settings['services_options'][$sc]['rate'];
+			}
+			$results[$sc]['estimate'] = ($total_amount > 0) ? sprintf('$%s', $total_amount) : '-';
+			$results[$sc]['estimate_sort'] = $total_amount;
+			
 		}
 		
 		$results = $this->removeErrorFromResults($results);
@@ -171,15 +159,12 @@ class Rates extends ShipEngine{
 	
 	private function sortResults($results){
 		foreach($results as $k => $v){
-			if(!isset($v['low'])) $results[$k]['low'] = 0;
-			if(!isset($v['low_sort'])) $results[$k]['low_sort'] = 0;
-			if(!isset($v['high'])) $results[$k]['high'] = 0;
-			if(!isset($v['high_sort'])) $results[$k]['high_sort'] = 0;
+			if(!isset($v['estimate'])) $results[$k]['estimate'] = 0;
+			if(!isset($v['estimate_sort'])) $results[$k]['estimate_sort'] = 0;
 		}
 		
-		$low_sort  = array_column($results, 'low_sort');
-		$high_sort = array_column($results, 'high_sort');
-		array_multisort($low_sort, SORT_ASC, $high_sort, SORT_ASC, $results);
+		$estimate_sort = array_column($results, 'estimate_sort');
+		array_multisort($estimate_sort, SORT_ASC, $results);
 		
 		return $results;
 	}
@@ -224,7 +209,7 @@ class Rates extends ShipEngine{
 			}
 		}
 		
-		dd($this->se_settings);
+		#dd($this->se_settings);
 	}
 	
 	private function addPickupData(){
@@ -235,10 +220,8 @@ class Rates extends ShipEngine{
 				"error_messages" => "",
 				"service_type"   => "Pickup",
 				"delivery_days"  => "N/A",
-				"low"            => "N/A",
-				"low_sort"       => 0,
-				"high"           => "N/A",
-				"high_sort"      => 0,
+				"estimate"            => "N/A",
+				"estimate_sort"       => 0,
 			];
 		}
 		

@@ -39,6 +39,7 @@
 			<input type="text" class="form-control" name="value" placeholder="Option value" value="{{$settings->value}}">
 		</div>
 		<button class="btn btn-primary" type="submit">Submit</button>
+		<a href="{{route('settings.index')}}" class="btn btn-secondary">Cancel</a>
 	</form>
 </div>
 @endsection

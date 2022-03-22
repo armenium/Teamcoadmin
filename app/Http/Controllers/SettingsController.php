@@ -19,7 +19,7 @@ class SettingsController extends Controller{
      */
     public function index(){
         #$settings = settings::with('client')->get();
-        $settings = Settings::all();
+        $settings = Settings::query()->orderBy('id', 'desc')->get();
 
         return view('settings.index', ['settings' => $settings]);
     }

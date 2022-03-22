@@ -60,12 +60,16 @@ label.img-item img {max-width: 100%; max-height: 110px; display: block; margin: 
 .custom-table-2 td .form-control {border: 0}
 .custom-table-2 td .form-control:focus {box-shadow: unset !important}
 
-table.settings tr td:nth-child(3){text-overflow: ellipsis; overflow: hidden; max-width: 200px; white-space: nowrap;}
-table.settings tr td:nth-child(4){width: 150px;}
-table.shipto tr th:nth-child(1){}
-table.shipto tr th:nth-child(2){width: 130px;}
-table.shipto tr th:nth-child(3){width: 150px;}
-table.shipto tr th:nth-child(4){width: 100px;}
+table.settings tr td:nth-child(3) {text-overflow: ellipsis; overflow: hidden; max-width: 200px; white-space: nowrap;}
+table.settings tr td:nth-child(4) {width: 150px;}
+table.shipto tr th:nth-child(1) {}
+table.shipto tr th:nth-child(2) {width: 130px;}
+table.shipto tr th:nth-child(3) {width: 150px;}
+table.shipto tr th:nth-child(4) {width: 100px;}
+table.shipping-results tr th,
+table.shipping-results tr td {text-align: left;}
+table.shipping-results tr th:nth-child(3),
+table.shipping-results tr td:nth-child(3) {text-align: right;}
 
 
 @media (max-width: 767px) {
@@ -98,4 +102,5 @@ table.shipto tr th:nth-child(4){width: 100px;}
 .error.info {color: #ccc;}
 .error.warning {color: #c00;}
 
-.custom-radio {display: block;}
+.custom-radio {display: block; position: relative; padding-left: 24px;}
+.custom-radio input {position: absolute; left: 0; top: 4px;}

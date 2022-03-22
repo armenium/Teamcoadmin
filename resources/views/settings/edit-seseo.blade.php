@@ -52,9 +52,10 @@
                         </tr>
                     @endforeach
                 </table>
-                <a role="button" id="js_add_row" class="btn btn-secondary">Add new</a>
             </div>
+            <a href="#" role="button" id="js_add_row" class="btn btn-secondary">Add new row</a>
             <button class="btn btn-primary" type="submit">Submit</button>
+            <a href="{{route('settings.index')}}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 @endsection
