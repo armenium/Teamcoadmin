@@ -66,6 +66,7 @@ table.shipto tr th:nth-child(1) {}
 table.shipto tr th:nth-child(2) {width: 130px;}
 table.shipto tr th:nth-child(3) {width: 150px;}
 table.shipto tr th:nth-child(4) {width: 100px;}
+table.shipping-results tr td small {display: block;}
 table.shipping-results tr th,
 table.shipping-results tr td {text-align: left;}
 table.shipping-results tr th:nth-child(3),

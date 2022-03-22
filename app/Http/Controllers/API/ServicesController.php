@@ -15,7 +15,6 @@ use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\ShipEngine\Rates;
-use App\Http\Controllers\ShippingCalculatorController;
 
 class ServicesController extends Controller {
 
@@ -130,10 +129,15 @@ class ServicesController extends Controller {
 	
 	public function getShippingFormFields(){
 		
-		$controller = new ShippingCalculatorController();
-		$view = $controller->getFields();
+		$custom_fields = Settings::get('ship_engine_jersey_type_options');
 		
-		return response()->json(['html' => $view]);
+		if(!is_null($custom_fields)){
+			$custom_fields = json_decode($custom_fields, true);
+		}else{
+			$custom_fields = [];
+		}
+		
+		return response()->json(['html' => view('shipping.fields', ['custom_fields' => $custom_fields])->render()]);
 	}
 	
 }

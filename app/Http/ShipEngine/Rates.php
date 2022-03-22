@@ -128,7 +128,7 @@ class Rates extends ShipEngine{
 				$service_type = $this->se_settings['services_options'][$sc]['type'];
 			}
 			if(isset($this->se_settings['services_options'][$sc]) && $this->se_settings['services_options'][$sc]['desc'] != ''){
-				$results[$sc]['service_type'] = sprintf('<small>%s</small><br>%s', $this->se_settings['services_options'][$sc]['desc'], $service_type);
+				$results[$sc]['service_type'] = sprintf('<small>%s</small>%s', $this->se_settings['services_options'][$sc]['desc'], $service_type);
 			}else{
 				$results[$sc]['service_type'] = $service_type;
 			}
