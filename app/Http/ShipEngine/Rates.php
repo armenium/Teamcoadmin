@@ -51,7 +51,7 @@ class Rates extends ShipEngine{
 		#dd($this->request_pattern);
 		$results = $this->post($this->endpoint_url, json_encode($this->request_pattern));
 		
-		return ['raw' => $results, 'html' => $this->toHtml($results)];
+		return ['raw' => $results, 'html' => $this->toHtml($results), 'desc' => $this->se_settings['result_description']];
 	}
 	
 	private function toHtml($data){
@@ -133,7 +133,18 @@ class Rates extends ShipEngine{
 				$results[$sc]['service_type'] = $service_type;
 			}
 			
-			$results[$sc]['delivery_days'] = sprintf('%d business day%s', $delivery_days, ($delivery_days == 1 ? '' : 's'));
+			$delivery_days_label = 'business day';
+			$delivery_days_suffix = ($delivery_days) == 1 ? '' : 's';
+			if(isset($this->se_settings['services_options'][$sc]) && isset($this->se_settings['services_options'][$sc]['transit_time'])){
+				if($this->se_settings['services_options'][$sc]['transit_time'] == 'cday'){
+					$delivery_days_label = 'calendar day';
+				}
+				if($delivery_days > 2){
+					$delivery_days = ($delivery_days-2).'-'.($delivery_days+1);
+				}
+			}
+			$results[$sc]['delivery_days'] = sprintf('%s %s%s', $delivery_days, $delivery_days_label, $delivery_days_suffix);
+			
 			if(isset($this->se_settings['services_options'][$sc])){
 				$total_amount += $this->se_settings['services_options'][$sc]['rate'];
 			}

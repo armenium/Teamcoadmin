@@ -42,8 +42,9 @@
                             <th>Service name<br><small>(json key: service_type)</small></th>
                             <th>Service code<br><small>(json key: service_code)</small></th>
                             <th>Custom rate<br><small>(Enter your custom rate without dollar sign)</small></th>
+                            <th>Transit time<br><small></small></th>
                             <th>Status<br><small>(uncheck if you want to exclude from the results)</small></th>
-                            <th>Action</th>
+                            <th>Action<br><small></small></th>
                         </tr>
                     @foreach($json_data as $k => $v)
                         <tr>
@@ -51,6 +52,12 @@
                             <td><input type="text" class="form-control" name="value[{{$k}}][type]" placeholder="service_type" value="{{$v['type']}}"></td>
                             <td><input type="text" class="form-control" name="value[{{$k}}][code]" placeholder="service_code" value="{{$v['code']}}"></td>
                             <td><input type="number" class="form-control" name="value[{{$k}}][rate]" placeholder="Digit only" value="{{$v['rate']}}"></td>
+                            <td>
+                                <select class="form-control" name="value[{{$k}}][transit_time]">
+                                    <option value="bday" @if(isset($v['transit_time']) && $v['transit_time'] == 'bday') selected="selected" @endif>Business days</option>
+                                    <option value="cday" @if(isset($v['transit_time']) && $v['transit_time'] == 'cday') selected="selected" @endif>Calendar days</option>
+                                </select>
+                            </td>
                             <td><input type="checkbox" class="form-control" name="value[{{$k}}][status]" value="1" {{$v['status'] ? 'checked' : ''}}></td>
                             <td><a role="button" class="js_remove_row btn btn-danger btn-remove"><i class="fa fa-trash"></i></a></td>
                         </tr>
@@ -95,6 +102,7 @@
                     $tr.append('<td><input type="text" class="form-control" name="value['+key+'][type]" placeholder="service_type" value=""></td>');
                     $tr.append('<td><input type="text" class="form-control" name="value['+key+'][code]" placeholder="service_code" value=""></td>');
                     $tr.append('<td><input type="number" class="form-control" name="value['+key+'][rate]" placeholder="Digit only" value=""></td>');
+                    $tr.append('<td><select class="form-control" name="value['+key+'][transit_time]"><option value="bday">Business days</option><option value="cday">Calendar days</option></select></td>');
                     $tr.append('<td><input type="checkbox" class="form-control" name="value['+key+'][status]" value="1" checked></td>');
                     $tr.append('<td><a role="button" class="js_remove_row btn btn-danger btn-remove"><i class="fa fa-trash"></i></a></td>');
 

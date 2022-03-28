@@ -109,7 +109,11 @@ class ServicesController extends Controller {
 		$jersey_type = $request->post('jersey_type');
 		
 		if(empty($country_code) || empty($state_province) || empty($postal_code) || empty($units)){
-			return response()->json(['html' => '<tr><td colspan="4" class="text-center">ERROR!<br>Invalid form data.<br>All fields are required.</td></tr>']);
+			return response()->json([
+				'raw' => [],
+				'html' => '<tr><td colspan="4" class="text-center">ERROR!<br>Invalid form data.<br>All fields are required.</td></tr>',
+				'desc' => '',
+			]);
 		}
 		
 		$params = [
