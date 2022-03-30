@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class roster extends Model{
 	
-	protected $fillable = ['reference', 'comments', 'number_color', 'inside_color', 'outside_color', 'accessory_items', 'settings'];
+	protected $fillable = ['reference', 'comments', 'number_color', 'inside_color', 'outside_color', 'accessory_items', 'settings', 'shipping_method'];
 	
 	public function client(){
 		return $this->belongsTo(client::class);

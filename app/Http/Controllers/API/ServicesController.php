@@ -15,6 +15,7 @@ use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\ShipEngine\Rates;
+use Illuminate\Support\Collection;
 
 class ServicesController extends Controller {
 
@@ -144,5 +145,21 @@ class ServicesController extends Controller {
 		return response()->json(['html' => view('shipping.fields', ['custom_fields' => $custom_fields])->render()]);
 	}
 	
+	public function getShippingServices(){
+		$data = collect([
+			#["id" => 0, "name" => "No Preference - Teamco will choose"],
+			["id" => 1, "name" => "Pickup (Markham, ON)"],
+			["id" => 2, "name" => "Canada Post - Expedited Parcel"],
+			["id" => 3, "name" => "Canada Post - Xpresspost"],
+			["id" => 4, "name" => "Canada Post - Priority"],
+			["id" => 5, "name" => "UPS Standard"],
+			["id" => 6, "name" => "UPS Express Early"],
+			["id" => 7, "name" => "UPS Express"],
+			["id" => 8, "name" => "Purolator Ground"],
+			["id" => 9, "name" => "Purolator Express"],
+		]);
+		
+		return response()->json(['data' => $data]);
+	}
 }
 

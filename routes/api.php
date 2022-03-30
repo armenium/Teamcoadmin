@@ -29,6 +29,7 @@ Route::get('deleteProduct/{id}','API\TokenController@DeleteProduct')->name('toke
 Route::get('deleteProductToken/{id}','API\TokenController@DeleteProductToken')->name('token.delete-product-token');
 Route::get('getStates','API\ServicesController@getCountryStates')->name('info.get-states');
 Route::get('getSizes','API\ServicesController@getSizes')->name('sizes');
+Route::get('getShippingServices','API\ServicesController@getShippingServices')->name('services.services');
 Route::post('getShippingRates','API\ServicesController@getShippingRates')->name('services.rates');
 Route::get('getShippingFormFields','API\ServicesController@getShippingFormFields')->name('services.fields');
 
