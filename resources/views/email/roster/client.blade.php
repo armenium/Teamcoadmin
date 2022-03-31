@@ -80,9 +80,16 @@
                 </tr>
             </table>
         </div>
+		<div class="clear"></div>
+		<div class="mt-20">
+			<h2>2. Shipping Method</h2>
+			<div>
+				{!! $data['roster']->shipping_method ? $data['roster']->shipping_method : 'No Preference - Teamco will choose' !!}
+			</div>
+		</div>
         <div class="clear"></div>
         <div class="mt-20">
-	        <h2>2. Jersey Details</h2>
+	        <h2>3. Jersey Details</h2>
 		    <div>
 			    <table>
 				    <tr>
@@ -104,12 +111,12 @@
 	    </div>
 	    <div class="clear"></div>
 		<div class="mt-20">
-			<h2 class="mt-5">3. Accessory Items</h2>
+			<h2 class="mt-5">4. Accessory Items</h2>
 			<div>{{$data['roster']->accessory_items}}</div>
 		</div>
 		<div class="clear"></div>
 	    <div class="mt-20">
-	        <h2>4. Numbers Colors</h2>
+	        <h2>5. Numbers Colors</h2>
 		    <div>
 			    <table>
 				    <tr>
@@ -131,14 +138,14 @@
 	    </div>
 	    <div class="clear"></div>
 	    <div class="mt-20">
-	        <h2 class="mt-5">5. Artwork Placement and Comments</h2>
+	        <h2 class="mt-5">6. Artwork Placement and Comments</h2>
 		    <div>
 			    {!! $data['roster']->comments ? nl2br($data['roster']->comments) : 'No comments' !!}
 			</div>
 	    </div>
 	    <div class="clear"></div>
 	    <div class="mt-20">
-		    <h2>6. Jersey Quantities</h2>
+		    <h2>7. Jersey Quantities</h2>
 		    <div>
 			    <table>
 				    @forelse($data['roster']->quantities as $quantity)
@@ -160,7 +167,7 @@
 	    </div>
 	    <div class="clear"></div>
 		<div class="mt-20">
-			<h2>7. Shorts or Socks Quantities</h2>
+			<h2>8. Shorts or Socks Quantities</h2>
 			<div>
 				<table>
 					@forelse($data['roster']->quantities as $quantity)
@@ -182,7 +189,7 @@
 		</div>
 		<div class="clear"></div>
 	    <div class="mt-20">
-	    	<h2>8. Team Roster</h2>
+	    	<h2>9. Team Roster</h2>
 	    	<table>
 	    		<thead>
 		            <tr>

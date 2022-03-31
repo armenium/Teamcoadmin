@@ -61,27 +61,38 @@
 				<div class="form-group"><input type="email" value="{{$roster->client->email}}" name="client[email]" placeholder="Email*" required="required" class="form-control"></div>
 				<div class="form-group"><input type="text" value="{{$roster->client->phone}}" name="client[phone]" placeholder="Phone" class="form-control"></div>
 
-				<div class="my-4"><h4 class="font-weight-bold font-red font-18">2. Jersey Details</h4></div>
+				<div class="my-4"><h4 class="font-weight-bold font-red font-18">2. Shipping Method</h4></div>
+				<p class="text-center"><em class="itl">Please list any other items that are also part of your order (e.g. matching shorts, hockey socks, etc.)</em></p>
+				<div class="form-group">
+					<select name="roster[shipping_method]" class="form-control select-form-control">
+						@foreach($shipping_services as $s => $c)
+							@php $selected = ($c['name'] == $roster->shipping_method) ? 'selected=selected' : '' @endphp
+							<option value="{{$c['name']}}" {{$selected}}>{{$c['name']}}</option>
+						@endforeach
+					</select>
+				</div>
+
+				<div class="my-4"><h4 class="font-weight-bold font-red font-18">3. Jersey Details</h4></div>
 				<div class="form-group"><input type="text" value="{{$roster->jersey->style_code}}" name="jersey_detail[style_code]" placeholder="Style Code*" required="required" class="form-control"></div>
                 @foreach($jersey_detail as $k => $jdetail)
 				    <div class="form-group"><input type="text" value="{{$jdetail}}" name="jersey_detail[colors][{{$k}}]" placeholder="Color {{$k}}" class="form-control"></div>
                 @endforeach
 
-				<div class="my-4"><h4 class="font-weight-bold font-red font-18">3. Accessory Items</h4></div>
+				<div class="my-4"><h4 class="font-weight-bold font-red font-18">4. Accessory Items</h4></div>
 				<p class="text-center"><em class="itl">Please list any other items that are also part of your order (e.g. matching shorts, hockey socks, etc.)</em></p>
 				<div class="form-group"><input value="{{$roster->accessory_items}}" name="roster[accessory_items]" type="text" placeholder="Accessory Items" class="form-control"></div>
 
-				<p class="my-4"><h4 class="font-weight-bold font-red font-18">4. Number Colors</h4></p>
+				<p class="my-4"><h4 class="font-weight-bold font-red font-18">5. Number Colors</h4></p>
 				<div class="form-group"><input type="text" value="{{$roster->number_color}}" name="roster[number_color]" placeholder="Number Colors" class="form-control"></div>
 
-				<div class="my-4"><h4 class="font-weight-bold font-red font-18">5. Artwork Placement and Order Description</h4></div>
+				<div class="my-4"><h4 class="font-weight-bold font-red font-18">6. Artwork Placement and Order Description</h4></div>
 				<p>Tell us the artwork that you would like on the jerseys, where it should be placed and any other relevant information.*</p>
 				<div class="form-group">
 					<label class="artwork-link"><em><a href="https://cdn.shopify.com/s/files/1/0040/0791/9729/files/Teamco_Artwork_Placement_Guide.png?8233878047739465168" target="_blank">(View our artwork placement guide)</a></em></label>
 					<textarea name="roster[comments]" cols="20" rows="5" required="required" placeholder="Please describe the artwork you would like on the jerseys, where it should be placed and any other relevant information. Please also include the correct spelling of your Team Name (if applicable)" class="form-control text-area">{{$roster->comments}}</textarea>
 				</div>
 
-                <div class="my-4"><h4 class="font-weight-bold font-red font-18">6. Jersey Quantities</h4></div>
+                <div class="my-4"><h4 class="font-weight-bold font-red font-18">7. Jersey Quantities</h4></div>
                 <div class="form-group">
                     <table class="table table-bordered custom-table mb-3">
                         <thead>
@@ -105,7 +116,7 @@
                     </table>
                 </div>
 
-				<div class="my-4"><h4 class="font-weight-bold font-red font-18">7. Shorts or Socks Quantities</h4></div>
+				<div class="my-4"><h4 class="font-weight-bold font-red font-18">8. Shorts or Socks Quantities</h4></div>
                 <div class="form-group">
                     <table class="table table-bordered custom-table mb-3">
                         <thead>
@@ -132,8 +143,8 @@
 
 			<div class="col-md-8 offset-md-2">
 				<div class="my-4">
-					<h4 class="font-weight-bold font-red font-18">{{$roster->settings['section_8']['title']}} <a role="button" class="title-edit-btn js_edit_title"><i class="fa fa-edit"></i></a></h4>
-					<input value="{{$roster->settings['section_8']['title']}}" name="roster[settings][section_8][title]" type="text" placeholder="8. Team Roster" class="form-control hidden">
+					<h4 class="font-weight-bold font-red font-18">{!! $roster->settings['section_9']['title'] !!} <a role="button" class="title-edit-btn js_edit_title"><i class="fa fa-edit"></i></a></h4>
+					<input value="{!! $roster->settings['section_9']['title'] !!}" name="roster[settings][section_9][title]" type="text" placeholder="9. Team Roster" class="form-control hidden">
 				</div>
 				<div class="text-center team-roster">
 					<p>Please note: Names will be printed exactly as entered (Names are usually printed in UPPERCASE). For teams over 30 players, please use our <a href="https://cdn.shopify.com/s/files/1/0040/0791/9729/files/TEAMCO_Roster_Form.xlsx?16321">Excel Roster Form</a></p>
@@ -143,12 +154,30 @@
 				<table class="table table-bordered custom-table-2 mb-3">
 					<thead>
 						<tr>
-							<th width="30">-</th>
-							<th width="*">Jersey Size</th>
-							<th class="text-nowrap" width="*">Jersey #</th>
-							<th width="50%">Jersey Name</th>
-							<th width="50%">Notes</th>
-							<th width="*">Shorts Size</th>
+							<th width="30">
+								<span>{!! $roster->settings['section_9']['table_head']['head_1'] !!} <a role="button" class="title-edit-btn js_edit_title hidden"><i class="fa fa-edit"></i></a></span>
+								<input value="{!! $roster->settings['section_9']['table_head']['head_1'] !!}" name="roster[settings][section_9][table_head][head_1]" type="text" placeholder="-" class="form-control hidden">
+							</th>
+							<th width="*">
+								<span>{!! $roster->settings['section_9']['table_head']['head_2'] !!} <a role="button" class="title-edit-btn js_edit_title hidden"><i class="fa fa-edit"></i></a></span>
+								<input value="{!! $roster->settings['section_9']['table_head']['head_2'] !!}" name="roster[settings][section_9][table_head][head_2]" type="text" placeholder="Jersey Size" class="form-control hidden">
+							</th>
+							<th class="text-nowrap" width="*">
+								<span>{!! $roster->settings['section_9']['table_head']['head_3'] !!} <a role="button" class="title-edit-btn js_edit_title hidden"><i class="fa fa-edit"></i></a></span>
+								<input value="{!! $roster->settings['section_9']['table_head']['head_3'] !!}" name="roster[settings][section_9][table_head][head_3]" type="text" placeholder="Jersey #" class="form-control hidden">
+							</th>
+							<th width="50%">
+								<span>{!! $roster->settings['section_9']['table_head']['head_4'] !!} <a role="button" class="title-edit-btn js_edit_title"><i class="fa fa-edit"></i></a></span>
+								<input value="{!! $roster->settings['section_9']['table_head']['head_4'] !!}" name="roster[settings][section_9][table_head][head_4]" type="text" placeholder="Jersey Name" class="form-control hidden">
+							</th>
+							<th width="50%">
+								<span>{!! $roster->settings['section_9']['table_head']['head_5'] !!} <a role="button" class="title-edit-btn js_edit_title"><i class="fa fa-edit"></i></a></span>
+								<input value="{!! $roster->settings['section_9']['table_head']['head_5'] !!}" name="roster[settings][section_9][table_head][head_5]" type="text" placeholder="Notes" class="form-control hidden">
+							</th>
+							<th width="*">
+								<span>{!! $roster->settings['section_9']['table_head']['head_6'] !!} <a role="button" class="title-edit-btn js_edit_title hidden"><i class="fa fa-edit"></i></a></span>
+								<input value="{!! $roster->settings['section_9']['table_head']['head_6'] !!}" name="roster[settings][section_9][table_head][head_6]" type="text" placeholder="Shorts Size" class="form-control hidden">
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -207,7 +236,7 @@
 				</table>
 
 				<div class="mt-3">
-					<div class="my-4"><h4 class="font-weight-bold font-red font-18">9. Attach Logo(s)</h4></div>
+					<div class="my-4"><h4 class="font-weight-bold font-red font-18">10. Attach Logo(s)</h4></div>
 					<div class="my-2 d-flex flex-row flex-wrap justify-content-center align-items-end uploaded-files">
 						<div class="text-center w-100 mb-2">Uploaded files:<br><em><small>Select files for remove</small></em></div>
 						@forelse($roster->files as $file)
@@ -225,7 +254,7 @@
 				</div>
 				<div class="mt-5">
 					<div class="form-group text-center">
-						<div class="my-4"><h4 class="font-weight-bold font-red font-18">10. Resend email to:</h4></div>
+						<div class="my-4"><h4 class="font-weight-bold font-red font-18">11. Resend email to:</h4></div>
 						<label class="ml-3 mr-3"><input type="checkbox" name="send_email[]" value="admin"> Admin</label>
 						<label class="ml-3 mr-3"><input type="checkbox" name="send_email[]" value="client"> Client</label>
 					</div>
@@ -333,7 +362,7 @@
 			};
 
 			var editTitle = function(){
-				var $parent = $(this).parent('h4'),
+				var $parent = $(this).parent(),
 					$input = $parent.next('input');
 
 				$input.removeClass('hidden');

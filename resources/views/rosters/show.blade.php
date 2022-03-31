@@ -85,7 +85,11 @@
 			</table>
 		</div>
 		<div class="col-md-6 offset-md-3 mb-20">
-			<h4 class="font-weight-bold font-red font-18">2. Jersey Details</h4>
+			<h4 class="font-weight-bold font-red font-18">2. Shipping Method:</h4>
+			<p class="mb-1">{!! $roster->shipping_method ? $roster->shipping_method : 'No Preference - Teamco will choose' !!}</p>
+		</div>
+		<div class="col-md-6 offset-md-3 mb-20">
+			<h4 class="font-weight-bold font-red font-18">3. Jersey Details</h4>
 			<table class="table table-bordered border-balck narrow-first-col slim-td-padding">
 				<tbody>
 					<tr>
@@ -109,11 +113,11 @@
 			</table>
 		</div>
 		<div class="col-md-6 offset-md-3 mb-20">
-			<h4 class="font-weight-bold font-red font-18">3. Accessory Items:</h4>
+			<h4 class="font-weight-bold font-red font-18">4. Accessory Items:</h4>
 			<p class="mb-1">{{ $roster->accessory_items ?? 'No accessory items' }}</p>
 		</div>
 		<div class="col-md-6 offset-md-3 mb-20">
-			<h4 class="font-weight-bold font-red font-18">4. Numbers Colors:</h4>
+			<h4 class="font-weight-bold font-red font-18">5. Numbers Colors:</h4>
 			<table class="table table-bordered border-balck narrow-first-col slim-td-padding">
 				<tbody>
 					<tr>
@@ -134,11 +138,11 @@
 			</table>
 		</div>
 		<div class="col-md-6 offset-md-3 mb-20">
-			<h4 class="font-weight-bold font-red font-18">5. Artwork Placement and Comments:</h4>
+			<h4 class="font-weight-bold font-red font-18">6. Artwork Placement and Comments:</h4>
 			<p class="mb-1">{!! $roster->comments ? nl2br($roster->comments) : 'No comments' !!}</p>
 		</div>
 		<div class="col-md-6 offset-md-3 mb-20">
-			<h4 class="font-weight-bold font-red font-18">6. Jersey Quantities:</h4>
+			<h4 class="font-weight-bold font-red font-18">7. Jersey Quantities:</h4>
 			<table class="table table-bordered border-balck narrow-first-col slim-td-padding">
 				<thead>
 					<tr>
@@ -168,7 +172,7 @@
 			</table>
 		</div>
 		<div class="col-md-6 offset-md-3 mb-20">
-			<h4 class="font-weight-bold font-red font-18">7. Shorts or Socks Quantities:</h4>
+			<h4 class="font-weight-bold font-red font-18">8. Shorts or Socks Quantities:</h4>
 			<table class="table table-bordered border-balck narrow-first-col slim-td-padding">
 				<thead>
 					<tr>

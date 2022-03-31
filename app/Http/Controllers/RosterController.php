@@ -23,15 +23,36 @@ class RosterController extends Controller{
 	
 	private $default_settings = [
 		'section_1'  => ['title' => '1. Contact and Shipping Information'],
-		'section_2'  => ['title' => '2. Jersey Details'],
-		'section_3'  => ['title' => '3. Accessory Items'],
-		'section_4'  => ['title' => '4. Number Colors'],
-		'section_5'  => ['title' => '5. Artwork Placement and Order Description'],
-		'section_6'  => ['title' => '6. Jersey Quantities'],
-		'section_7'  => ['title' => '7. Shorts or Socks Quantities'],
-		'section_8'  => ['title' => '8. Team Roster'],
-		'section_9'  => ['title' => '9. Attach Logo(s)'],
-		'section_10' => ['title' => '10. Resend email to:'],
+		'section_2'  => ['title' => '2. Shipping Method'],
+		'section_3'  => ['title' => '3. Jersey Details'],
+		'section_4'  => ['title' => '4. Accessory Items'],
+		'section_5'  => ['title' => '5. Number Colors'],
+		'section_6'  => ['title' => '6. Artwork Placement and Order Description'],
+		'section_7'  => ['title' => '7. Jersey Quantities'],
+		'section_8'  => ['title' => '8. Shorts or Socks Quantities'],
+		'section_9'  => ['title' => '9. Team Roster', 'table_head' => [
+			'head_1' => '-',
+			'head_2' => 'Jersey Size',
+			'head_3' => 'Jersey #',
+			'head_4' => 'Jersey Name',
+			'head_5' => 'Notes',
+			'head_6' => 'Shorts Size',
+		]],
+		'section_10'  => ['title' => '10. Attach Logo(s)'],
+		'section_11' => ['title' => '11. Resend email to:'],
+	];
+	
+	private $shipping_services = [
+		["id" => 0, "name" => "No Preference - Teamco will choose"],
+		["id" => 1, "name" => "Pickup (Markham, ON)"],
+		["id" => 2, "name" => "Canada Post - Expedited Parcel"],
+		["id" => 3, "name" => "Canada Post - Xpresspost"],
+		["id" => 4, "name" => "Canada Post - Priority"],
+		["id" => 5, "name" => "UPS Standard"],
+		["id" => 6, "name" => "UPS Express Early"],
+		["id" => 7, "name" => "UPS Express"],
+		["id" => 8, "name" => "Purolator Ground"],
+		["id" => 9, "name" => "Purolator Express"],
 	];
 	
 	/**
@@ -258,16 +279,22 @@ class RosterController extends Controller{
 		
 		if(!empty($roster->settings)){
 			$roster->settings = json_decode($roster->settings, true);
+			if(count($roster->settings) < count($this->default_settings)){
+			
+			}
+			$roster->settings = array_replace_recursive($this->default_settings, $roster->settings);
+			#dd($roster->settings);
 		}else{
 			$roster->settings = $this->default_settings;
 		}
 		
 		$data = [
-			'roster'           => $roster,
-			'colors_sizes'     => $colors_sizes,
-			'states'           => $states,
-			'jersey_detail'    => $jersey_detail,
-			'teams_empty_rows' => 40 - count($roster->teams),
+			'roster'            => $roster,
+			'shipping_services' => $this->shipping_services,
+			'colors_sizes'      => $colors_sizes,
+			'states'            => $states,
+			'jersey_detail'     => $jersey_detail,
+			'teams_empty_rows'  => 40 - count($roster->teams),
 		];
 		
 		#dd($roster->files);
@@ -301,7 +328,9 @@ class RosterController extends Controller{
 		
 		$new_roster = $request->roster;
 		
-		$new_roster['settings'] = json_encode(array_merge($this->default_settings, $new_roster['settings']));
+		$new_roster['settings'] = array_merge($this->default_settings, $new_roster['settings']);
+		#dd($new_roster['settings']);
+		$new_roster['settings'] = json_encode($new_roster['settings']);
 		
 		# Updating current Roster entry
 		roster::find($request->roster['id'])->update($new_roster);
@@ -386,6 +415,8 @@ class RosterController extends Controller{
 		
 		# Resending mails
 		if(isset($request->send_email)){
+			$roster = roster::find($request->roster['id']);
+			
 			$data = [
 				'environment'   => $request->environment,
 				'roster'        => $roster,
