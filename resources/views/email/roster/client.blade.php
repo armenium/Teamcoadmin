@@ -189,15 +189,15 @@
 		</div>
 		<div class="clear"></div>
 	    <div class="mt-20">
-	    	<h2>9. Team Roster</h2>
+		    <h2>{!! $data['roster']->settings['section_9']['title'] !!}</h2>
 	    	<table>
 	    		<thead>
 		            <tr>
 			            <td class="text_left">-</td>
 			            <td class="text_center">Size</td>
 			            <td class="text_center">Number</td>
-			            <td class="text_center">Name</td>
-			            <td class="text_center">Notes</td>
+			            <td class="text_center">{!! $data['roster']->settings['section_9']['table_head']['head_4'] !!}</td>
+			            <td class="text_center">{!! $data['roster']->settings['section_9']['table_head']['head_5'] !!}</td>
 			            <td class="text_center">Short</td>
 		            </tr>
 		        </thead>

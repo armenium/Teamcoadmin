@@ -202,14 +202,14 @@
 			</table>
 		</div>
 		<div class="col-md-6 offset-md-3 mb-20 print-mt-big">
-			<h4 class="font-weight-bold font-red font-18">{{$roster->settings['section_8']['title']}}:</h4>
+			<h4 class="font-weight-bold font-red font-18">{!! $roster->settings['section_9']['title'] !!}:</h4>
 			<table class="table table-bordered border-balck slim-td-padding font-16">
 					<tr>
 						<th>Row</th>
 						<th>Size</th>
 						<th>Number</th>
-						<th>Name</th>
-						<th>Notes</th>
+						<th>{!! $roster->settings['section_9']['table_head']['head_4'] !!}</th>
+						<th>{!! $roster->settings['section_9']['table_head']['head_5'] !!}</th>
 						<th>Short</th>
 					</tr>
 				<tbody>

@@ -138,9 +138,10 @@ class Rates extends ShipEngine{
 			if(isset($this->se_settings['services_options'][$sc]) && isset($this->se_settings['services_options'][$sc]['transit_time'])){
 				if($this->se_settings['services_options'][$sc]['transit_time'] == 'cday'){
 					$delivery_days_label = 'calendar day';
-				}
-				if($delivery_days > 2){
-					$delivery_days = ($delivery_days-2).'-'.($delivery_days+1);
+					
+					if($delivery_days > 2){
+						$delivery_days = ($delivery_days - 2).'-'.($delivery_days + 1);
+					}
 				}
 			}
 			$results[$sc]['delivery_days'] = sprintf('%s %s%s', $delivery_days, $delivery_days_label, $delivery_days_suffix);

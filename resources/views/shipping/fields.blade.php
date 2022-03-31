@@ -26,7 +26,7 @@
 @endif
 <div class="row mb-3 align-items-center">
 	<div class="col-12">
-		<input type="number" class="form-control" name="units" min="1" max="60" value="" placeholder="Total # of Units in Order (max 60)">
+		<input type="number" class="form-control" name="units" min="1" max="60" value="" placeholder="Total # of Units in Order (max 60)*">
 		<div class="input-desc">Please include the total number of jerseys, shorts, and/or socks that would be in the order. [E.g. an order for 20 soccer jerseys and 20 soccer shorts would have a total quantity of 40]</div>
 	</div>
 </div>
