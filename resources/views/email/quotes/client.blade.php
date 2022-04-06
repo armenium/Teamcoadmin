@@ -34,7 +34,7 @@
 					<tr>
 						<td colspan="2">
 							<p class="message">Dear {{$data['quote']->client->name}},</p>
-							<p class="message">Thank you for your inquiry. We will review it and contact you within one business day.</p>
+							<p class="message">Thank you for your inquiry. We will review it and contact you within 1-3 business days - depending on seasonal demand.</p>
 							<p class="message">Thanks,<br>
 							<span>Teamco Customer Service</span><br>
 							<span>1-888-668-6443</span>
