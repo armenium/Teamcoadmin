@@ -8,6 +8,7 @@ use App\Http\SVG\arraysHelpers;
 use App\Mail\RosterAdminMailable;
 use App\Mail\RosterClientMailable;
 use App\quanity;
+use App\roster;
 use App\Size;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -250,6 +251,8 @@ class RosterController extends Controller {
 		    $roster->admin_template = 'email.roster.preview.admin';
 		    $roster->client_template = 'email.roster.preview.client';
 	    }*/
+		
+		$roster->settings = roster::$default_settings;
 		
 		$data = [
         	'environment' => $request->environment,

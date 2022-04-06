@@ -191,25 +191,25 @@ class RosterController extends Controller{
 		
 		if(!empty($roster->settings)){
 			$roster->settings = json_decode($roster->settings, true);
-			if(count($roster->settings) < count($this->default_settings)){
+			if(count($roster->settings) < count(roster::$default_settings)){
 				$settings = [];
-				$settings['section_1'] = $this->default_settings['section_1'];
-				$settings['section_2'] = $this->default_settings['section_2'];
-				$settings['section_3'] = $this->default_settings['section_3'];
-				$settings['section_4'] = $this->default_settings['section_4'];
-				$settings['section_5'] = $this->default_settings['section_5'];
-				$settings['section_6'] = $this->default_settings['section_6'];
-				$settings['section_7'] = $this->default_settings['section_7'];
-				$settings['section_8'] = $this->default_settings['section_8'];
+				$settings['section_1'] = roster::$default_settings['section_1'];
+				$settings['section_2'] = roster::$default_settings['section_2'];
+				$settings['section_3'] = roster::$default_settings['section_3'];
+				$settings['section_4'] = roster::$default_settings['section_4'];
+				$settings['section_5'] = roster::$default_settings['section_5'];
+				$settings['section_6'] = roster::$default_settings['section_6'];
+				$settings['section_7'] = roster::$default_settings['section_7'];
+				$settings['section_8'] = roster::$default_settings['section_8'];
 				$settings['section_9'] = $roster->settings['section_8'];
-				$settings['section_10'] = $this->default_settings['section_10'];
-				$settings['section_11'] = $this->default_settings['section_11'];
+				$settings['section_10'] = roster::$default_settings['section_10'];
+				$settings['section_11'] = roster::$default_settings['section_11'];
 				$roster->settings = $settings;
 			}
-			$roster->settings = array_replace_recursive($this->default_settings, $roster->settings);
+			$roster->settings = array_replace_recursive(roster::$default_settings, $roster->settings);
 			#dd($roster->settings);
 		}else{
-			$roster->settings = $this->default_settings;
+			$roster->settings = roster::$default_settings;
 		}
 		
 		$data = [
@@ -296,25 +296,25 @@ class RosterController extends Controller{
 		
 		if(!empty($roster->settings)){
 			$roster->settings = json_decode($roster->settings, true);
-			if(count($roster->settings) < count($this->default_settings)){
+			if(count($roster->settings) < count(roster::$default_settings)){
 				$settings = [];
-				$settings['section_1'] = $this->default_settings['section_1'];
-				$settings['section_2'] = $this->default_settings['section_2'];
-				$settings['section_3'] = $this->default_settings['section_3'];
-				$settings['section_4'] = $this->default_settings['section_4'];
-				$settings['section_5'] = $this->default_settings['section_5'];
-				$settings['section_6'] = $this->default_settings['section_6'];
-				$settings['section_7'] = $this->default_settings['section_7'];
-				$settings['section_8'] = $this->default_settings['section_8'];
+				$settings['section_1'] = roster::$default_settings['section_1'];
+				$settings['section_2'] = roster::$default_settings['section_2'];
+				$settings['section_3'] = roster::$default_settings['section_3'];
+				$settings['section_4'] = roster::$default_settings['section_4'];
+				$settings['section_5'] = roster::$default_settings['section_5'];
+				$settings['section_6'] = roster::$default_settings['section_6'];
+				$settings['section_7'] = roster::$default_settings['section_7'];
+				$settings['section_8'] = roster::$default_settings['section_8'];
 				$settings['section_9'] = $roster->settings['section_8'];
-				$settings['section_10'] = $this->default_settings['section_10'];
-				$settings['section_11'] = $this->default_settings['section_11'];
+				$settings['section_10'] = roster::$default_settings['section_10'];
+				$settings['section_11'] = roster::$default_settings['section_11'];
 				$roster->settings = $settings;
 			}
-			$roster->settings = array_replace_recursive($this->default_settings, $roster->settings);
+			$roster->settings = array_replace_recursive(roster::$default_settings, $roster->settings);
 			#dd($roster->settings);
 		}else{
-			$roster->settings = $this->default_settings;
+			$roster->settings = roster::$default_settings;
 		}
 		
 		$data = [
@@ -357,7 +357,7 @@ class RosterController extends Controller{
 		
 		$new_roster = $request->roster;
 		
-		$new_roster['settings'] = array_merge($this->default_settings, $new_roster['settings']);
+		$new_roster['settings'] = array_merge(roster::$default_settings, $new_roster['settings']);
 		#dd($new_roster['settings']);
 		$new_roster['settings'] = json_encode($new_roster['settings']);
 		
